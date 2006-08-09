@@ -1,0 +1,128 @@
+
+%
+% NOTE -- ONLY EDIT Biobase.Rnw!!!
+% Biobase.tex file will get overwritten.
+%
+%\VignetteIndexEntry{Iyer517}
+%\VignetteDepends{Iyer517, Biobase}
+%\VignetteKeywords{Expression Analysis, time course}
+%\VignettePackage{Iyer517}
+
+
+%
+% NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
+% likely to be overwritten.
+%
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage[authoryear,round]{natbib}
+\usepackage{hyperref}
+
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+
+\bibliographystyle{plainnat} 
+ 
+\begin{document}
+
+\title{An {\tt exprSet} for the Iyer genomic time series database}
+\author{VJ Carey, {\tt stvjc@channing.harvard.edu}}
+\maketitle
+
+\section{Overview}
+Iyer, Eisen et al (Science 1999, v283 83-87)
+report a cDNA-chip based experiment to illustrate
+the transcriptional response of fibroblasts to serum.
+The original data are archived in full at 
+\url{genome-www.stanford.edu/serum/data.html}.
+This package provides access to a subset of the
+data leading to Figure 2 of their paper.
+It would be worthwhile to provide high-level objects
+representing the entire dataset, and this will be
+taken up in the future.
+
+\section{The {\tt Iyer517} {\tt exprSet}}
+To get access to the data, install the
+{\it Iyer517} package and then attach it:
+<<>>=
+library(Iyer517)
+@
+A summary of the key dataset is:
+<<>>=
+show(Iyer517)
+@
+The first few expression records are:
+<<>>=
+exprs(Iyer517)[1:4,1:6]
+@
+Note that columns 1 to 13 correspond to sampling times
+in the absence of cycloheximide (an inhibitor of protein synthesis)
+and columns 14 to 19 correspond to sampling times
+in the presence of cycloheximide.  The tags {\tt UNSYN}
+and {\tt UNSYNC} are sampling from cells in exponential
+replication.
+
+\section{Replication of some findings}
+
+\subsection{Figure 2}
+To reproduce Figure 2 we need a color scheme and
+some transformations.  The following seems
+to do a reasonable job:
+
+<<>>=
+chg <- seq(.1,8,.01)
+mycol <- rgb( chg/8, 1-chg/8, 0 )
+CEX <- exprs(Iyer517)
+CEX[CEX>8] <- 8
+@
+\begin{center}
+<<fig=TRUE>>=
+image(t(log10(CEX[517:1,1:13])),col=mycol,xlim=c(0,3),axes=FALSE,
+ xlab="Hours post exposure to serum")
+axis(1,at=(1:13)/13,lab=c("0",".25",".5","1","2","4","6","8","12","16","20","24","u"),cex=.3)
+@
+\end{center}
+@
+
+However, the time 0 column of Figure 2 in the paper
+shows some variability.  This is hard to square with the
+caption indicating that the data depicted are ratios relative
+to time 0.
+
+\subsection{The mean within-cluster trajectories}
+To orient it seems we need clusters contiguous to
+the boundaries of the image matrix, because there are gaps
+of unspecified length between many of the clusters.
+
+<<fig=TRUE>>=
+par(mfrow=c(2,2))
+plot(apply((CEX[1:100,1:13]),2,mean),main="Cluster A", log="y",
+ylab="fold change", xlab="index in timing sequence")
+plot(apply((CEX[101:242,1:13]),2,mean),main="Cluster B", log="y",
+ylab="fold change", xlab="index in timing sequence")
+plot(apply((CEX[483:499,1:13]),2,mean),main="Cluster I", log="y",
+ylab="fold change", xlab="index in timing sequence")
+plot(apply((CEX[500:517,1:13]),2,mean),main="Cluster J", log="y",
+ylab="fold change", xlab="index in timing sequence")
+@
+
+The trajectories are very similar to those reported in the paper.
+\section{Extended annotation}
+An effort has been made to incorporate GO tags into this data resource.
+<<>>=
+data(IyerAnnotated)
+print(IyerAnnotated[1:5,])
+@
+At the time of construction, at most 5 GO tags had been
+associated with any probes in the dataset, and a large number
+of probes lacked both Locus Link and GO tags.
+\end{document}

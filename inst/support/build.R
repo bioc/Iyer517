@@ -1,0 +1,22 @@
+i517 <- read.delim("fig2massg.txt", h=T)
+library(Biobase)
+
+ex <- data.matrix(i517[,-c(1,2,3,4)])
+row.names(ex) <- as.character(i517$Accnum)
+time.hrs <- c(0,.25,.5,1,2,4,6,8,12,16,20,24,NA,.5,1,2,4,0,NA)
+cycloheximide <- c(rep(FALSE,13), rep(TRUE,6))
+ip <- data.frame(time.hrs,cycloheximide)
+vl <- list(time.hrs="time, NA=Unsync", cycloheximide="cycloheximide present")
+vp <- new("phenoData", pData=ip, varLabels=vl)
+Iyer517 <- new("exprSet", exprs=ex, phenoData=vp)
+save(Iyer517,file="Iyer517.rda")
+#chg <- seq(.1,8,.01)
+#mycol <- rgb( chg/8, 1-chg/8, 0 )
+#CEX <- ex
+#CEX[ex>8] <- 8
+#image(t(log10(CEX[517:1,1:13])),col=mycol,xlim=c(0,3),axes=FALSE)
+#axis(1,at=(1:13)/13,lab=c("0",".25",".5","1","2","4","6","8","12","16","20","24","u"),cex=.3)
+#abline(h=1-(100/517))
+#abline(h=1-(242/517))
+#plot(apply(log10(CEX[1:100,1:13]),2,mean))
+#plot(apply(log10(CEX[101:242,1:13]),2,mean))

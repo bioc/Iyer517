@@ -1,0 +1,6 @@
+The original data mounted as fig2data.txt at
+http://genome-www.stanford.edu/serum/fig2data.txt
+is a little hard to parse.  I save that file
+as fig2data.txt.orig and use instead fig2massg.txt,
+a massaged version that has 518 tab-delimited lines
+with shortened column heading entries.
