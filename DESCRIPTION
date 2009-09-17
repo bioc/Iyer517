@@ -1,10 +1,10 @@
 Package: Iyer517
-Version: 1.4.3
+Version: 1.4.4
 Title: exprSets for Iyer, Eisen et all 1999 Science paper
 Author: Vishy Iyer <vishy@cmgm.stanford.edu>
 Maintainer: Vince Carey <stvjc@channing.harvard.edu>
 Description: representation of public Iyer data
 	from http://genome-www.stanford.edu/serum/clusters.html
-License: unknown
+License: Artistic-2.0
 Depends: Biobase (>= 2.5.5)
 biocViews: ExperimentData
