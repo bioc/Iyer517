@@ -1,5 +1,5 @@
 \name{Iyer517}
-\docType{instance}
+\docType{data}
 \alias{Iyer517}
 \title{exprSet instance Iyer517, time series on transcriptional response of
 fibroblasts to serum }
