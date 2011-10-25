@@ -60,6 +60,7 @@ To get access to the data, install the
 {\it Iyer517} package and then attach it:
 <<>>=
 library(Iyer517)
+data(Iyer517)
 @
 A summary of the key dataset is:
 <<>>=
